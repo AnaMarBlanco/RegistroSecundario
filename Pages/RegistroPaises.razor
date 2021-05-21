@@ -1,0 +1,79 @@
+﻿@page "/rpaises"
+@using RegistroSecundario.BLL;
+@using RegistroSecundario.DAL;
+@using RegistroSecundario.Entidades;
+<h3>Registro Paises</h3>
+<EditForm Model="Pais" OnValidSubmit="Guardar">
+    <div class="container-fluid">
+        <div class="form-group">
+            <label for="paisIdNumber">Pais Id</label>
+            <div class="row">
+                <div class="btn btn-secondary col-9"><InputNumber id="paisIdNumber" @bind-Value="Pais.PaisId" class="form-control" /></div>
+                <div class="col-3"><button type="button" class="form-control" @onclick="Buscar">Buscar</button></div>
+            </div>
+            
+            
+        </div>
+        <div class="form-group">
+            <label for="nombreText">Nombre</label>
+            <InputText id="nombreText" @bind-Value="Pais.Nombre" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="idiomaText">Idioma</label>
+            <InputText id="idiomaText" @bind-Value="Pais.Idioma" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary " @onclick="Limpiar">Limpiar</button>
+                <button type="submit" class="btn btn-success " @onclick="Guardar">Guardar</button>
+                <button type="button" class="btn btn-danger "@onclick="Eliminar">Eliminar</button>
+            </div>
+        </div>
+        <div class="form-control">
+            <p>@Mensaje</p>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    Paises Pais = new Paises();
+    public string Mensaje { get; set; } = string.Empty;
+
+    private void Guardar()
+    {
+        if(PaisController.Guardar(Pais))
+        {
+            Mensaje = "Pais Guardado con Exito";
+            Limpiar();
+        }
+
+    }
+
+    private void Eliminar()
+    {
+        if (PaisController.Eliminar(Pais.PaisId))
+        {
+            Mensaje = "Pais Eliminado con Exito";
+            Limpiar();
+        }
+    }
+
+    private void Buscar()
+    {
+        var temp = PaisController.Buscar(Pais.PaisId);
+        if (temp != null)
+        {
+            Pais = temp;
+        }
+    }
+
+    private void Nuevo()
+    {
+        Limpiar();
+    }
+    private void Limpiar()
+    {
+        Pais = new Paises();
+    }
+}
